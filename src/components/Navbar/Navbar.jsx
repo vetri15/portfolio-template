@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import useSmoothScroll from '../../hooks/useSmoothScroll';
 import { personalInfo } from '../../data/portfolioData';
 import './Navbar.css';
@@ -8,7 +8,6 @@ const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('');
   const { handleAnchorClick } = useSmoothScroll();
-  const menuRef = useRef(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -32,7 +31,6 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Lock body scroll when menu is open
   useEffect(() => {
     if (menuOpen) {
       document.body.style.overflow = 'hidden';
@@ -45,18 +43,11 @@ const Navbar = () => {
   }, [menuOpen]);
 
   const navItems = [
-    { label: 'About', href: '#about', flagged: false, icon: '👤', description: 'Learn more about me' },
-    { label: 'Skills', href: '#skills', flagged: true, icon: '⚡', description: 'Technologies I use' },
-    { label: 'Projects', href: '#projects', flagged: true, icon: '🚀', description: 'My recent work' },
-    { label: 'Experience', href: '#experience', flagged: false, icon: '💼', description: 'Career journey' },
-    { label: 'Testimonials', href: '#testimonials', flagged: false, icon: '💬', description: 'What people say' },
-  ];
-
-  const socialLinks = [
-    { label: 'GH', title: 'GitHub', url: '#' },
-    { label: 'LI', title: 'LinkedIn', url: '#' },
-    { label: 'TW', title: 'Twitter', url: '#' },
-    { label: 'DR', title: 'Dribbble', url: '#' },
+    { label: 'About', href: '#about', flagged: false },
+    { label: 'Skills', href: '#skills', flagged: true },
+    { label: 'Projects', href: '#projects', flagged: true },
+    { label: 'Experience', href: '#experience', flagged: false },
+    { label: 'Testimonials', href: '#testimonials', flagged: false },
   ];
 
   const handleNavClick = (e, href) => {
@@ -127,34 +118,29 @@ const Navbar = () => {
         </div>
       </nav>
 
-      {/* ===================== */}
-      {/* MOBILE FULLSCREEN MENU */}
-      {/* ===================== */}
-      <div className={`mobile-menu-overlay ${menuOpen ? 'open' : ''}`} onClick={() => setMenuOpen(false)} />
+      {/* Mobile Overlay — tap to close */}
+      <div
+        className={`mobile-menu-overlay ${menuOpen ? 'open' : ''}`}
+        onClick={() => setMenuOpen(false)}
+      />
 
-      <div className={`mobile-menu ${menuOpen ? 'open' : ''}`} ref={menuRef}>
-        {/* Mobile Menu Background Effects */}
+      {/* Mobile Drawer */}
+      <div className={`mobile-menu ${menuOpen ? 'open' : ''}`}>
         <div className="mobile-menu-bg-effects">
           <div className="mobile-orb mobile-orb-1" />
           <div className="mobile-orb mobile-orb-2" />
-          <div className="mobile-orb mobile-orb-3" />
-          <div className="mobile-grid-bg" />
         </div>
 
-        {/* Mobile Menu Header */}
-        <div className="mobile-menu-header">
-          <a href="#" className="nav-logo" onClick={(e) => handleNavClick(e, '#hero')}>
-            {personalInfo.shortName}
-          </a>
-          <div className="mobile-menu-badge">
-            <span className="mobile-badge-dot" />
-            Menu
-          </div>
-        </div>
+        {/* Back / Close Button */}
+        <button className="mobile-back-btn" onClick={() => setMenuOpen(false)}>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M19 12H5M12 19l-7-7 7-7" />
+          </svg>
+          Close
+        </button>
 
-        {/* Mobile Menu Navigation */}
+        {/* Nav Links */}
         <div className="mobile-menu-nav">
-          <div className="mobile-nav-label">Navigation</div>
           {navItems.map((item, index) => {
             const sectionId = item.href.replace('#', '');
             const isActive = activeSection === sectionId;
@@ -165,66 +151,31 @@ const Navbar = () => {
                 className={`mobile-nav-item ${isActive ? 'active' : ''} ${item.flagged ? 'flagged' : ''}`}
                 key={item.label}
                 onClick={(e) => handleNavClick(e, item.href)}
-                style={{ animationDelay: `${0.1 + index * 0.06}s` }}
+                style={{ animationDelay: `${0.08 + index * 0.05}s` }}
               >
-                <div className="mobile-nav-item-left">
-                  <div className={`mobile-nav-icon ${item.flagged ? 'icon-shimmer' : ''}`}>
-                    {item.icon}
-                  </div>
-                  <div className="mobile-nav-text">
-                    <span className="mobile-nav-label-text">{item.label}</span>
-                    <span className="mobile-nav-desc">{item.description}</span>
-                  </div>
-                </div>
-                <div className="mobile-nav-arrow">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M5 12h14M12 5l7 7-7 7" />
-                  </svg>
-                </div>
+                <span className="mobile-nav-label-text">{item.label}</span>
+                {item.flagged && <span className="mobile-flagged-badge">✦</span>}
+                <svg className="mobile-nav-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
                 {item.flagged && <div className="mobile-nav-shimmer-line" />}
               </a>
             );
           })}
         </div>
 
-        {/* Mobile CTA */}
-        <div className="mobile-menu-cta" style={{ animationDelay: '0.45s' }}>
+        {/* CTA */}
+        <div className="mobile-menu-cta" style={{ animationDelay: '0.4s' }}>
           <a
             href="#contact"
             className="mobile-cta-button"
             onClick={(e) => handleNavClick(e, '#contact')}
           >
-            <div className="mobile-cta-glow" />
-            <span className="mobile-cta-content">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
-              </svg>
-              Let's Talk
-            </span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
+            </svg>
+            Let's Talk
           </a>
-        </div>
-
-        {/* Mobile Menu Footer */}
-        <div className="mobile-menu-footer" style={{ animationDelay: '0.55s' }}>
-          <div className="mobile-footer-socials">
-            {socialLinks.map((link, index) => (
-              <a
-                href={link.url}
-                className="mobile-social-link"
-                title={link.title}
-                key={index}
-              >
-                {link.label}
-              </a>
-            ))}
-          </div>
-          <div className="mobile-footer-email">
-            <span className="mobile-email-icon">✉️</span>
-            {personalInfo.email}
-          </div>
-          <div className="mobile-footer-copyright">
-            © {new Date().getFullYear()} {personalInfo.name}
-          </div>
         </div>
       </div>
     </>
