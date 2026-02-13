@@ -106,7 +106,7 @@ const Navbar = () => {
             </li>
           </ul>
 
-          {/* Mobile Menu Toggle */}
+          {/* Hamburger */}
           <div
             className={`menu-toggle ${menuOpen ? 'active' : ''}`}
             onClick={() => setMenuOpen(!menuOpen)}
@@ -118,29 +118,24 @@ const Navbar = () => {
         </div>
       </nav>
 
-      {/* Mobile Overlay — tap to close */}
+      {/* Blurred backdrop — tap to close */}
       <div
-        className={`mobile-menu-overlay ${menuOpen ? 'open' : ''}`}
+        className={`mobile-backdrop ${menuOpen ? 'open' : ''}`}
         onClick={() => setMenuOpen(false)}
       />
 
-      {/* Mobile Drawer */}
-      <div className={`mobile-menu ${menuOpen ? 'open' : ''}`}>
-        <div className="mobile-menu-bg-effects">
-          <div className="mobile-orb mobile-orb-1" />
-          <div className="mobile-orb mobile-orb-2" />
-        </div>
+      {/* Right-side partial drawer */}
+      <div className={`mobile-drawer ${menuOpen ? 'open' : ''}`}>
 
-        {/* Back / Close Button */}
-        <button className="mobile-back-btn" onClick={() => setMenuOpen(false)}>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M19 12H5M12 19l-7-7 7-7" />
+        {/* Close button */}
+        <button className="drawer-close-btn" onClick={() => setMenuOpen(false)}>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M18 6L6 18M6 6l12 12" />
           </svg>
-          Close
         </button>
 
-        {/* Nav Links */}
-        <div className="mobile-menu-nav">
+        {/* Nav items */}
+        <div className="drawer-nav">
           {navItems.map((item, index) => {
             const sectionId = item.href.replace('#', '');
             const isActive = activeSection === sectionId;
@@ -148,27 +143,27 @@ const Navbar = () => {
             return (
               <a
                 href={item.href}
-                className={`mobile-nav-item ${isActive ? 'active' : ''} ${item.flagged ? 'flagged' : ''}`}
+                className={`drawer-nav-item ${isActive ? 'active' : ''} ${item.flagged ? 'flagged' : ''}`}
                 key={item.label}
                 onClick={(e) => handleNavClick(e, item.href)}
-                style={{ animationDelay: `${0.08 + index * 0.05}s` }}
+                style={{ animationDelay: `${0.06 + index * 0.05}s` }}
               >
-                <span className="mobile-nav-label-text">{item.label}</span>
-                {item.flagged && <span className="mobile-flagged-badge">✦</span>}
-                <svg className="mobile-nav-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <span className="drawer-nav-text">{item.label}</span>
+                {item.flagged && <span className="drawer-flagged-star">✦</span>}
+                <svg className="drawer-nav-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M5 12h14M12 5l7 7-7 7" />
                 </svg>
-                {item.flagged && <div className="mobile-nav-shimmer-line" />}
+                {item.flagged && <div className="drawer-shimmer-line" />}
               </a>
             );
           })}
         </div>
 
         {/* CTA */}
-        <div className="mobile-menu-cta" style={{ animationDelay: '0.4s' }}>
+        <div className="drawer-cta" style={{ animationDelay: '0.35s' }}>
           <a
             href="#contact"
-            className="mobile-cta-button"
+            className="drawer-cta-btn"
             onClick={(e) => handleNavClick(e, '#contact')}
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
