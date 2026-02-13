@@ -39,11 +39,11 @@
 .nav-links {
   display: flex;
   list-style: none;
-  gap: 2rem;
+  gap: 1.5rem;
   align-items: center;
 }
 
-.nav-links a {
+.nav-links > li > a {
   color: var(--text-secondary);
   text-decoration: none;
   font-size: 0.9rem;
@@ -53,7 +53,7 @@
   padding: 0.5rem 0;
 }
 
-.nav-links a::after {
+.nav-links > li > a::after {
   content: '';
   position: absolute;
   bottom: 0;
@@ -65,13 +65,172 @@
   transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.nav-links a:hover {
+.nav-links > li > a:hover {
   color: var(--text-primary);
 }
 
-.nav-links a:hover::after {
+.nav-links > li > a:hover::after {
   width: 100%;
 }
+
+.nav-links > li > a.nav-active {
+  color: var(--text-primary);
+}
+
+.nav-links > li > a.nav-active::after {
+  width: 100%;
+}
+
+/* ========================
+   SHIMMER BORDER WRAPPER
+   ======================== */
+
+.shimmer-border-wrapper {
+  position: relative;
+  padding: 1.5px;
+  border-radius: 10px;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* Animated gradient border background */
+.shimmer-border-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: 10px;
+  background: conic-gradient(
+    from var(--shimmer-angle, 0deg),
+    #6366f1,
+    #8b5cf6,
+    #a78bfa,
+    #c084fc,
+    #e879f9,
+    #f472b6,
+    #fb923c,
+    #fbbf24,
+    #a3e635,
+    #34d399,
+    #22d3ee,
+    #60a5fa,
+    #6366f1
+  );
+  animation: shimmerRotate 3s linear infinite;
+}
+
+@property --shimmer-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes shimmerRotate {
+  0% {
+    --shimmer-angle: 0deg;
+  }
+  100% {
+    --shimmer-angle: 360deg;
+  }
+}
+
+/* Fallback for browsers that don't support @property */
+@supports not (background: conic-gradient(from 0deg, red, blue)) {
+  .shimmer-border-bg {
+    background: linear-gradient(
+      90deg,
+      #6366f1,
+      #a78bfa,
+      #e879f9,
+      #fbbf24,
+      #34d399,
+      #60a5fa,
+      #6366f1
+    );
+    background-size: 300% 100%;
+    animation: shimmerSlide 3s linear infinite;
+  }
+
+  @keyframes shimmerSlide {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 300% 50%; }
+  }
+}
+
+/* Extra shimmer glow effect */
+.shimmer-border-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 10px;
+  background: inherit;
+  filter: blur(8px);
+  opacity: 0.4;
+  z-index: -1;
+}
+
+/* Inner link styled over the border */
+.nav-link-shimmer {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 1.1rem;
+  background: var(--bg-primary);
+  border-radius: 8.5px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.shimmer-border-wrapper:hover .nav-link-shimmer {
+  color: var(--text-primary);
+  background: rgba(10, 10, 11, 0.85);
+}
+
+.shimmer-border-wrapper.active .nav-link-shimmer {
+  color: var(--text-primary);
+  background: rgba(10, 10, 11, 0.7);
+}
+
+/* Pulsing dot inside shimmer links */
+.shimmer-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent-light);
+  box-shadow: 0 0 6px var(--accent-light);
+  animation: shimmerDotPulse 2s ease-in-out infinite;
+}
+
+@keyframes shimmerDotPulse {
+  0%, 100% {
+    opacity: 1;
+    box-shadow: 0 0 6px var(--accent-light);
+  }
+  50% {
+    opacity: 0.4;
+    box-shadow: 0 0 12px var(--accent-light), 0 0 20px var(--accent);
+  }
+}
+
+/* Hover glow intensify */
+.shimmer-border-wrapper:hover .shimmer-border-bg::after {
+  opacity: 0.7;
+  filter: blur(12px);
+}
+
+.shimmer-border-wrapper:hover .shimmer-dot {
+  background: #e879f9;
+  box-shadow: 0 0 8px #e879f9;
+}
+
+/* ========================
+   CTA BUTTON
+   ======================== */
 
 .nav-cta {
   padding: 0.6rem 1.5rem !important;
@@ -91,6 +250,10 @@
   transform: translateY(-1px);
   box-shadow: 0 0 30px rgba(99, 102, 241, 0.3);
 }
+
+/* ========================
+   MOBILE MENU
+   ======================== */
 
 .menu-toggle {
   display: none;
@@ -141,5 +304,15 @@
 
   .menu-toggle {
     display: flex;
+  }
+
+  .shimmer-border-wrapper {
+    width: 100%;
+  }
+
+  .nav-link-shimmer {
+    width: 100%;
+    justify-content: center;
+    padding: 0.6rem 1.5rem;
   }
 }
