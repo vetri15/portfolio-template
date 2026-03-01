@@ -59,7 +59,7 @@ const Navbar = () => {
     <>
       <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
         <div className="nav-container">
-          <a href="https://github.com/vetri15/portfolio-template" className="nav-logo" >
+          <a href="https://github.com/vetri15/portfolio-template" className="nav-logo" onClick={(e) => handleNavClick(e, 'https://github.com/vetri15/portfolio-template')}>
             {personalInfo.shortName}
           </a>
 
